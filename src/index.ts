@@ -1,10 +1,31 @@
-import * as express from "express"
-import { Request, Response } from "express"
+// index.ts
 
-const app = express()
+// Start
+import { start } from './app';
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!")
-})
+// MongoDB
+import { connectMongoDB } from './database';
 
-app.listen(3000, () => console.log("Listening on port 3000"))
+// Configs
+import { PORT } from './configs/global.config';
+
+
+const main = async () => {
+  try {
+    
+    // Start Server
+    const httpServer = await start();
+
+    httpServer.listen(PORT, () => {
+      console.log(`Corriendo en el puerto http://localhost:${PORT}`);
+    });
+
+    // Conntect DB
+    connectMongoDB();
+
+  } catch (err) {
+    console.error('Error al iniciar el servidor:', err);
+  }
+};
+
+main();
